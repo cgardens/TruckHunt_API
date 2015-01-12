@@ -14,7 +14,7 @@
   var session = require('express-session');
   var multer = require('multer');
   var errorHandler = require('error-handler');
-  var User = require('../server/schemas/user');
+  var User = require('./schemas/user');
 
   app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
