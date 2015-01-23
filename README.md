@@ -1,11 +1,12 @@
 # TruckHunt_API
 
 TruckHunt
- ===========
+===========
  
- Want to find food trucks nearby? TruckHunt pins the current location of 80 food trucks in the San Francisco Bay Area. Find trucks by category, follow trucks you like and see where they are.
+Want to find food trucks nearby? TruckHunt pins the current location of 80 food trucks in the San Francisco Bay   Area. Find trucks by category, follow trucks you like and see where they are.
 
  ###Dependencies
+ 
  - NodeJS: [http://nodejs.org/](http://nodejs.org/)
  - ExpressJS: [http://expressjs.com/starter/installing.html](http://expressjs.com/starter/installing.html)
  - MongoDB: [http://www.mongodb.org/downloads](http://www.mongodb.org/downloads)
