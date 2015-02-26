@@ -1,5 +1,3 @@
-
-// var TruckSchema = require('../schemas/truck');
 var jwt = require("jsonwebtoken");
 var Truck = require('../schemas/truck');
 var User = require('../schemas/user');
@@ -8,8 +6,6 @@ module.exports = function () {
 
   var functions = {};
 
-  //corresponds to route in server.js
-  // ---> /trucks
   functions.trucks = function (req, res) {
     // TruckSchema.find()
     Truck.find()
@@ -23,16 +19,7 @@ module.exports = function () {
     });
   };
 
-  //corresponds to route in server.js
-  // ---> /trucks/new
   functions.createTruck = function (req, res) {
-    //Put array of truck objects here if you want to add more
-    // for(var i = 0; i < trucks.length; i++){
-    //   var trukName = trucks[i].Name;
-    //   var twitHandle = trucks[i].Handle;
-    //   var twitURL = trucks[i].TwitterAccount;
-    //   var Type = trucks[i].Type;
-    //   var img = trucks[i].Img;
 
         var record = new Truck({
           truckName: trukName,
@@ -44,17 +31,12 @@ module.exports = function () {
 
         record.save(function(err) {
           if (err) {
-            console.log(err);
             res.status(500).json({status: err});
           }
         });
     };
 
-  // };
-
-
   functions.users = function (req, res) {
-    // TruckSchema.find()
     User.find()
       .setOptions({sort: 'name'})
       .exec(function(err, users) {
@@ -65,27 +47,6 @@ module.exports = function () {
       }
     });
   };
-
-
-  // functions.createUser = function (req, res) {
-  //   var userName = "Chris M.";
-  //   var location = "San Francisco";
-  //   var truckID = "549c8dd631cb430000000002";
-
-  //   // var record = new TruckSchema({
-  //   var record = new User({
-  //     name: userName,
-  //     city: location
-  //   });
-
-
-  //   record.save(function(err) {
-  //     if (err) {
-  //       console.log(err);
-  //       res.status(500).json({status: err});
-  //     }
-  //   });
-  // };
 
   functions.authenticate = function(req, res) {
     User.findOne({email: req.body.email, password: req.body.password}, function(err, user) {
@@ -146,10 +107,8 @@ module.exports = function () {
   };
 
   functions.meTrucks = function(req, res) {
-    // console.log("meTrucks",req.token);
     User.findOne({token: req.token}, function(err, user) {
         if (err) {
-          console.log("error")
             res.json({
                 type: false,
                 data: "Error occured: " + err
@@ -157,9 +116,7 @@ module.exports = function () {
         }
 
         if (user) {
-          console.log("User");
           Truck.find({ _id: {$in: user.trucksFollowing }}, function(err, trucks){
-            console.log(trucks)
             res.json(trucks);
           });
         }
@@ -169,7 +126,6 @@ module.exports = function () {
   };
 
   functions.me = function(req, res) {
-    console.log("me", req.token);
     User.findOne({token: req.token}, function(err, user) {
         if (err) {
             res.json({
@@ -200,45 +156,22 @@ module.exports = function () {
 };
 
   functions.updateTruck = function (req, res) {
-//     handle: "BellyBurgers",
-// address:"  1550 Howard Street, San Francisco, CA"
-// },
 
+    for(var i =0; i < trucks.length; i++){
+      var handle = trucks[i].handle;
+      var address = trucks[i].address;
 
-for(var i =0; i < trucks.length; i++){
-  var handle = trucks[i].handle;
-  var address = trucks[i].address;
-
-    Truck.update({ twitterHandle: handle },
-    // TruckSchema.update({ _id: id },
-      { $set: { currentAddress: address}},
-        function (err) {
-          if (err) {
-            console.log(err);
-            res.status(500).json({status: 'failure'});
-          } else {
-            res.json({status: 'success'});
-          }
-        }
-    );
-
-}
-
-
-
-    // Truck.update({ _id: id },
-    // // TruckSchema.update({ _id: id },
-    //   { $set: { truckName: 'Nicks Tacos'}},
-    //     function (err) {
-    //       if (err) {
-    //         console.log(err);
-    //         res.status(500).json({status: 'failure'});
-    //       } else {
-    //         res.json({status: 'success'});
-    //       }
-    //     }
-    // );
-
+        Truck.update({ twitterHandle: handle },
+          { $set: { currentAddress: address}},
+            function (err) {
+              if (err) {
+                res.status(500).json({status: 'failure'});
+              } else {
+                res.json({status: 'success'});
+              }
+            }
+      );
+    }
   };
 
   functions.deleteTruck = function (req, res) {
@@ -247,7 +180,6 @@ for(var i =0; i < trucks.length; i++){
 
     Truck.remove({_id: id}, function (err) {
       if (err) {
-        console.log(err);
       }
     });
   };
@@ -257,7 +189,6 @@ for(var i =0; i < trucks.length; i++){
 
     User.findOne({token: req.token}, function(err, user) {
         if (err) {
-          console.log("error");
             res.json({
                 type: false,
                 data: "Error occured: " + err
@@ -275,24 +206,11 @@ for(var i =0; i < trucks.length; i++){
     });
   };
 
-  // functions.followTruck = function (req, res) {
-  //   var userID = "54a43031201e3e7a887e1c37";
-  //   // var truckID = "549cbd751fe3510000000001";
-  //   var truckID = "549cc182cd77fc0000000001";
-
-
-  //   User.update({_id: userID}, { $push: { trucksFollowing:[truckID]}}, {}, function(err) {
-  //     if (err)
-  //       res.send(err);
-  //   });
-  // };
-
   functions.showFollowedTrucks = function (req, res) {
     var userID = req.param('id');
 
     User.findOne({ _id: userID}, function( err, user){
       if (err){
-        console.log(err);
         res.status(404).json({status: err});
       }
       if (user) {
@@ -302,7 +220,6 @@ for(var i =0; i < trucks.length; i++){
       }
     });
   };
-
 
   functions.list = function (req, res) {
     res.json(trucks);
